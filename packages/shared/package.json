@@ -1,0 +1,19 @@
+{
+	"name": "@coredin/shared",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"types": "dist/@types/index.d.ts",
+	"license": "MIT",
+	"scripts": {
+		"build": "tsc -b .",
+		"generate-contract-client": "yarn run ts-codegen --cmd=generate --schema=../contract --out=src/coreum/contract-ts --name=coredin --plugin=client --bundle=0",
+		"test": "echo \"there are no tests yet\""
+	},
+	"devDependencies": {
+		"@cosmwasm/ts-codegen": "^1.11.1",
+		"typescript": "^5.6.2"
+	},
+	"dependencies": {
+		"typia": "^6.11.1"
+	}
+}

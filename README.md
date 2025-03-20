@@ -1,32 +1,60 @@
-# CoredIn - EBC 9 Hackathon Web3Wizards Submission
+# cored.in
 
-<img src="./images/CoredIn.png" alt="CoredIn" style="width:300px;"/>
+cored.in is a professional SocialFi app empowered with self-sovereign identity.
 
-Welcome to **CoredIn**, the new professional SocialFI network built on Coreum!
+## Quick Start Notes
 
-With CoredIn, all users information is backed by verifiable credentials following the latest standards on **Self-Solvereign identity** while leveraging a custom WASM contract to create an onchain **DID registry** and control data sharing.
+1.  Run `yarn && yarn build` to install all the dependencies and `yarn prepare` to setup Typia validation library (only first time)
+2.  Run `yarn back-dev` to start your BackEnd dev environment (make sure to copy packages/backend/secrets-backend-local.json.example as secrets-backend-local.json)
+3.  Run `yarn front-dev` to start your FrontEnd dev environment (make sure to copy packages/frontend/.env.example as .env.json)
+OR
+2. Run `yarn dev` to start both back and front dev environments
 
-On top of that, users are able to **subscribe** to each other profile with a soulbound **smartNFT** minted by **paying a small fee to the profile owner**. Since only generic and anonymous data is stored onchain, subscribed users can **access the actual profile information** and will soon be able to **securely message the profile owner** directly within CoredIn with encrypted onchain messages (WIP - not implemented during the Hackathon).
+## Database
+This project uses a posgreSQL DB, one sample instance could be run with `docker compose up -d postgres` inside packages/backend.
 
-CoredIn MVP has been developed during the EBC hackathon by a **multidisplicary team from all ages and experiences**.
+It can then be accessed directly with `psql -U dev_user -h localhost -p 5432 -d coredin_dev_db`.
 
-## Project Presentation
+Migrations can be generated from backend package with `yarn typeorm:generate db/migrations/<Migration description>` and ran with `yarn typeorm:migrate`.
 
-You can find our presentation with all product and tech details
-<a href="https://www.canva.com/design/DAFyLR0keU8/rTj4WoBQXyiraOsQPNotTQ/view?utm_content=DAFyLR0keU8&utm_campaign=designshare&utm_medium=link&utm_source=viewer" target="_blank"> here</a>. An static PDF file of the presentation is also available inside the repo at documents/CoredInPresentation.pdf
+## Technologies
 
-## Project Demo
+This project is built with the following open source libraries, frameworks and languages. It uses typescript.
+| Tech | Description |
+| --------------------------------------------- | ------------------------------------------------------------------ |
+| ------ | ------ React Frontend Environment ------ |
+| [Vite JS](https://vitejs.dev/) | Next Generation Frontend Tooling |
+| ------ | ------ Backend Framework ------ |
+| [Nest JS](https://nestjs.com/) | A progressive Node.js framework for building efficient, reliable and scalable server-side applications |
+| [TypeORM](https://typeorm.io/) | Typescript-first Object Relational Mapper (ORM) module for NestJS to easily work with PostgreSQL |
+| [Nestia](https://github.com/samchon/nestia) | Simple and efficient data typing and input validation library |
+| ------ | ------ CSS Framework ------ |
+| [Chakra](https://chakra-ui.com/) | A simple, modular and accessible component library that gives you the building blocks you need to build your React applications |
+| ------ | ------ CosmWASM Development Environment ------ |
+| [CosmWASM](https://cosmwasm.com/) | RUST contract for smarts contracts development in COREUM |
 
-Here's a <a href="https://clipchamp.com/watch/UHVPrAPOLjh" target="_blank"> video</a> showcasing the flows implemented during the hackathon.
+## Adding packages
 
-## Testnet deployment
+```
+yarn workspace @coredin/backend add (package-name)
 
-The app has been succesfully deployed in testnet!
+yarn workspace @coredin/frontend add (package-name)
+```
 
-The CoredIN contracs is deployed at <a href="https://explorer.testnet-1.coreum.dev/coreum/accounts/testcore1wnc64xdun6m754crqhxsht09ad4zv7dw0t26msq7m36004rjnlyqhpykdn" target="_blank"> testcore1wnc64xdun6m754crqhxsht09ad4zv7dw0t26msq7m36004rjnlyqhpykdn</a>.
+## Building docker images
 
-You can play around with it here: <a href="https://coredin.rubentewierik.dev/" target="_blank"> https://coredin.rubentewierik.dev/</a>.
+```
+yarn docker
+```
 
-## Production environment
+## Vault Setup
 
-The app is not prod ready yet but hopefully it's going to be available soon at https://cored.in
+```
+1. Run the openbao vault with the docker compose in packagaes/backend
+2. Initialize the vault with `bao operator init -key-shares=1 -key-threshold=1` (run directly inside the running container, if you get a permission denied issue run `chmod -R 777 /vault` first)
+3. Store the generated root access token and unseal key
+4. Add the root access token to secrets_backend_local.json
+5. Unseal the vault with `bao operator unseal` inside the running docker
+6. Log into the vault with `bao login token=..`
+7. Enable transit secrets engine with `bao secrets enable transit`
+```

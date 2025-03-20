@@ -1,0 +1,1 @@
+export const CONTRACT_ADDRESS="core1twvxn6drv92yw34pyyytdrn55zwya43x0gx3h583qvwqkyxtppnqkuxxc5";

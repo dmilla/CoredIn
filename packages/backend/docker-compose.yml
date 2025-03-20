@@ -1,0 +1,85 @@
+name: coredin
+services:
+  postgres:
+    image: postgres:16
+    container_name: coredin_db
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: coredin_dev_db
+      POSTGRES_USER: dev_user
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  waltid-db:
+    image: postgres:16
+    container_name: coredin_waltid_wallet_db
+    # ports:
+    #   - '5433:5432'
+    environment:
+      POSTGRES_DB: coredin_dev_ssi_db
+      POSTGRES_USER: waltid_user
+      POSTGRES_PASSWORD: waltid_pass
+    volumes:
+      - postgres_ssi_data:/var/lib/postgresql/data
+    networks:
+      main:
+        aliases:
+          - db
+  vault:
+    image: openbao/openbao:2.0.2
+    container_name: coredin_openbao_vault
+    environment:
+      BAO_ADDR: 'http://0.0.0.0:8200'
+      AWS_ACCESS_KEY_ID: REDACTED
+      AWS_SECRET_ACCESS_KEY: REDACTED
+    ports:
+        - 8200:8200
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./vault/local/config:/vault/config
+      - vault_data:/vault/data:rw
+    command: bao server -config /vault/config/bao_config.json
+  wallet-api:
+    image: waltid/wallet-api:0.8.1
+    ports:
+      - 7001:7001
+    environment:
+      AUTH_ENCRYPTION_KEY: dncygwnvivxzlohc
+      AUTH_SIGN_KEY: jyjeylmidlylokzh
+      AUTH_TOKEN_KEY: hjklwcptiniwjkdwwkigreumcayoyiso
+      DB_URL: db:5432/coredin_dev_ssi_db
+      DB_USER: waltid_user
+      DB_PASS: waltid_pass
+    volumes:
+      - ./wallet-api/local/config:/waltid-wallet-api/config
+    networks:
+      - main
+    depends_on:
+      - waltid-db
+  issuer-api:
+    image: docker.io/waltid/issuer-api:0.8.1
+    environment:
+      ISSUER_API_PORT: 7002
+    ports:
+      - 7002:7002
+    volumes:
+      - ./issuer-api/local/config:/waltid-issuer-api/config
+  verifier-api:
+    platform: linux/x86_64
+    image: docker.io/waltid/verifier-api:0.8.1
+    environment:
+      VERIFIER_API_PORT: 7003
+    ports:
+      - 7003:7003
+    volumes:
+      - ./verifier-api/local/config:/waltid-verifier-api/config
+
+volumes:
+  postgres_data:
+  postgres_ssi_data:
+  vault_data:
+
+networks:
+  main:

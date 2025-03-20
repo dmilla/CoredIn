@@ -1,0 +1,15 @@
+#!/bin/sh
+echo "Looking for contract changes..."
+if git diff --cached --quiet -- "packages/contract/*.rs"; then
+    echo "No contract changes found"
+    exit 0
+else
+    echo "Contract changes found, building contract..."
+    yarn build-contract
+    echo "Built succesfull, exporting contract typescript client..."
+    yarn generate-contract-client
+    echo "Export succesfull, adding new files..."
+    git add packages/shared/src/coreum/contract-ts
+    git add packages/contract/schema
+    exit 0
+fi

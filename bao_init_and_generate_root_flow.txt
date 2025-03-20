@@ -1,0 +1,153 @@
+/ # bao status
+Key                      Value
+---                      -----
+Recovery Seal Type       awskms
+Initialized              false
+Sealed                   true
+Total Recovery Shares    0
+Threshold                0
+Unseal Progress          0/0
+Unseal Nonce             n/a
+Version                  2.0.0-alpha20240329
+Build Date               2024-03-29T21:37:50Z
+Storage Type             file
+HA Enabled               false
+/ # bao operator init
+Recovery Key 1: pnHv/j7z0rWpy3l5ZYjMZiVyhBe2stl+YhDEufnZX0TI
+Recovery Key 2: 8bulzxpPoWFSakCRnPG7fHdy7LDeNbkBHoogImR1kgvh
+Recovery Key 3: GBwXWYQjtW5I3JQP+r07MsFaMm9bACktOIGexwI5671U
+Recovery Key 4: p6AjGWdzdsY8O+4h/1mL2KuDzrY1fbBbnUq76thhis6d
+Recovery Key 5: C1eZ1jJrFueXgAydlj17pic+LOpI/McSfRhFFz6JnstP
+
+Initial Root Token: s.shJhIAPzHJ1thIPvtjABgDDK
+
+Success! Vault is initialized
+
+Recovery key initialized with 5 key shares and a key threshold of 3. Please
+securely distribute the key shares printed above.
+/ # bao status
+Key                      Value
+---                      -----
+Recovery Seal Type       shamir
+Initialized              true
+Sealed                   false
+Total Recovery Shares    5
+Threshold                3
+Version                  2.0.0-alpha20240329
+Build Date               2024-03-29T21:37:50Z
+Storage Type             file
+Cluster Name             vault-cluster-49b662d9
+Cluster ID               ccd02f0b-8dd2-b45e-ef66-89bbc2c5cda2
+HA Enabled               false
+/ # bao login
+Token (will be hidden): 
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.shJhIAPzHJ1thIPvtjABgDDK
+token_accessor       Nm4zTuGDQiqzIsPY67WzkIuJ
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]
+/ # bao token create -policy=admin -ttl=24h
+WARNING! The following warnings were returned from Vault:
+  * Policy "admin" does not exist
+Key                  Value
+---                  -----
+token                s.VNKipZ4zb1UsG30RFQ4aNLyG
+token_accessor       EiWYD9CCRsigzdWq0SVCNNh9
+token_duration       24h
+token_renewable      true
+token_policies       ["admin" "default"]
+identity_policies    []
+policies             ["admin" "default"]
+/ # bao operator generate-root -init
+A One-Time-Password has been generated for you and is shown in the OTP field.
+You will need this value to decode the resulting root token, so keep it safe.
+Nonce         659f3284-6621-decc-e0ec-727df88d5775
+Started       true
+Progress      0/3
+Complete      false
+OTP           mtGmoSPUqWQDrMF487pdiwdnu8
+OTP Length    26
+/ # bao operator generate-root -nonce=659f3284-6621-decc-e0ec-727df88d5775 pnHv/j7z0rWpy3l5ZYjMZiVyhBe2stl+YhDEufnZX0TI
+Nonce       659f3284-6621-decc-e0ec-727df88d5775
+Started     true
+Progress    1/3
+Complete    false
+/ # bao operator generate-root -nonce=659f3284-6621-decc-e0ec-727df88d5775 8bulzxpPoWFSakCRnPG7fHdy7LDeNbkBHoogImR1kgvh
+Nonce       659f3284-6621-decc-e0ec-727df88d5775
+Started     true
+Progress    2/3
+Complete    false
+/ # bao operator generate-root -nonce=659f3284-6621-decc-e0ec-727df88d5775 GBwXWYQjtW5I3JQP+r07MsFaMm9bACktOIGexwI5671U
+Nonce            659f3284-6621-decc-e0ec-727df88d5775
+Started          true
+Progress         3/3
+Complete         true
+Encoded Token    Hlp0WRc7Jh0YAxN1J3gWZ0xRRlAlFi06TAk
+/ # bao operator generate-root -decode Hlp0WRc7Jh0YAxN1J3gWZ0xRRlAlFi06TAk -otp mtGmoSPUqWQDrMF487pdiwdnu8
+s.34xhvHiTB1U5PStf64LaIT91
+/ # bao login s.34xhvHiTB1U5PStf64LaIT91
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.34xhvHiTB1U5PStf64LaIT91
+token_accessor       jNbY9HMGObxIrOiu2DNF7l3o
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]
+/ # bao login s.shJhIAPzHJ1thIPvtjABgDDK
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.shJhIAPzHJ1thIPvtjABgDDK
+token_accessor       Nm4zTuGDQiqzIsPY67WzkIuJ
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]
+/ # bao token revoke -self
+Success! Revoked token (if it existed)
+/ # bao list auth/token/accessors
+Error listing auth/token/accessors: Error making API request.
+
+URL: GET http://0.0.0.0:8200/v1/auth/token/accessors?list=true
+Code: 403. Errors:
+
+* permission denied
+/ # bao login s.shJhIAPzHJ1thIPvtjABgDDK
+Error authenticating: error looking up token: Error making API request.
+
+URL: GET http://0.0.0.0:8200/v1/auth/token/lookup-self
+Code: 403. Errors:
+
+* permission denied
+/ # bao login s.34xhvHiTB1U5PStf64LaIT91
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.34xhvHiTB1U5PStf64LaIT91
+token_accessor       jNbY9HMGObxIrOiu2DNF7l3o
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]

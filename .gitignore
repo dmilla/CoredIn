@@ -1,1 +1,107 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+
+coverage
+coverage.json
+typechain
+
+# Hardhat files
+
+cache
+artifacts
+/packages/onchain/node_modules
+/packages/onchain/deployments/localhost
+/packages/onchain/typechain-types
+
+# Foundry files
+
+/packages/onchain/cache
+/packages/onchain/out
+
+# shared
+
+/packages/shared/dist
+packages/shared/tsconfig.tsbuildinfo
+# vite
+
+/packages/frontend/node_modules
+/packages/frontend/dist
+
+# production
+
+/build
+
+# misc
+
 .DS_Store
+\*.pem
+
+# debug
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log\*
+
+# local env files
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+
+.vercel
+
+/packages/backend/deployments/localhost/*
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+yarn-error.log
+
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Include override files you do wish to add to version control using negated pattern
+# !example_override.tf
+
+# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+# example: *tfplan*
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore secrets files
+secrets-*.json
+
+*.Identifier

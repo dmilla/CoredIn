@@ -1,9 +1,0 @@
-{
-    "context": ["https://www.w3.org/2018/credentials/v1"],
-    "credentialSubject": {
-      "assetType": "clock",
-      "agreedValue": "100000",
-      "agreedValueCurrency": "EUR"
-    },
-    "type": ["VerifiableCredential", "GenericAsset"]
-  }

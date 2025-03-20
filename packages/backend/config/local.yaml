@@ -1,0 +1,37 @@
+secrets:
+  file_path: secrets-backend-local.json
+  json_env_var: "SECRETS"
+
+chain:
+  rpc_endpoint: 'https://full-node.testnet-1.coreum.dev:26657/'
+  bech32_prefix: 'testcore'
+  gas_price: '0.0625utestcore'
+  contract_address: 'testcore13awqzasrfn0mel6ftgwhhy28cla5zl9apxswumjpjepuaszpfyes4eny2x'
+
+db:
+  host: 'localhost'
+  port: 5432
+  user: 'dev_user'
+  database: 'coredin_dev_db'
+  synchronize: false
+  debug: true
+
+unleash:
+  url: https://gitlab.com/api/v4/feature_flags/unleash/56592491/
+  appName: dev
+
+vault:
+  api:
+    url: 'http://host.docker.internal:8200'
+
+wallet:
+  api:
+    url: 'http://localhost:7001'
+
+issuer:
+  api:
+    url: 'http://localhost:7002'
+
+verifier:
+  api:
+    url: 'http://localhost:7003'

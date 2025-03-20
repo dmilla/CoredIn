@@ -1,0 +1,41 @@
+{
+  "name": "coredin",
+  "version": "0.0.1",
+  "description": "coredin test from create-web3 monorepo quickstart with vite and hardhat",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "setup-hooks": "chmod +x ./.githooks/pre-commit && git config core.hooksPath ./.githooks && echo 'hooks ready'",
+    "front-dev": "yarn workspace @coredin/frontend dev",
+    "back-dev": "yarn workspace @coredin/backend start:debug",
+    "dev": "yarn workspaces foreach -A -p -i run dev",
+    "build": "yarn workspace @coredin/shared build && yarn workspaces foreach -A -p -i --exclude @coredin/shared run build",
+    "build-shared": "yarn workspace @coredin/shared build",
+    "build-docker": "docker build --file base.Dockerfile --tag coredin/base:latest . && docker build --file front.Dockerfile --tag coredin/front:latest . && docker build --file back.Dockerfile --tag coredin/back:latest .",
+    "build-docker-backend": "docker build --file base.Dockerfile --tag coredin/base:latest . && docker build --file back.Dockerfile --tag coredin/back:latest .",
+    "serve": "yarn workspace @coredin/frontend serve",
+    "chain": "yarn workspace @coredin/onchain chain",
+    "compile": "yarn workspace @coredin/onchain compile",
+    "test": "yarn workspace @coredin/onchain test",
+    "clean": "yarn workspace @coredin/onchain clean",
+    "deploy-backend": "yarn build-docker-backend && yarn workspace @coredin/backend deploy",
+    "deploy-frontend": "yarn workspace @coredin/frontend deploy",
+    "prepare": "yarn setup-hooks && yarn workspace @coredin/backend prepare",
+    "docker": "docker build . -f base.Dockerfile -t coredin/base && docker build . -f front.Dockerfile -t coredin/front && docker build . -f back.Dockerfile -t coredin/back",
+    "lint": "yarn workspace @coredin/unleash-proxy lint && yarn workspace @coredin/unleash-proxy-cdk lint",
+    "lint:fix": "yarn workspace @coredin/unleash-proxy lint && yarn workspace @coredin/unleash-proxy-cdk lint:fix",
+    "build-contract": "cd packages/contract && cargo install cargo-post && cargo post build",
+    "deploy-contract": "cd packages/contract && ./scripts/2_deploy.sh",
+    "generate-contract-client": "yarn workspace @coredin/shared generate-contract-client"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "packageManager": "yarn@4.5.0",
+  "resolutions": {
+    "@usecapsule/web-sdk": "1.23.0",
+    "@usecapsule/cosmjs-v0-integration": "1.21.0"
+  }
+}
